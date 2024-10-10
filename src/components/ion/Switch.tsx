@@ -1,9 +1,11 @@
+// src/components/ion/Switch.tsx
 // Generated with Ion on 10/10/2024, 7:45:40 AM
 // Figma Link: https://www.figma.com/design/GzGS1XBtO8fnXGsjKDPiIf?node-id=153:11261
 // ion/Switch: Generated with Ion on 10/10/2024, 7:45:39 AM
 import * as SwitchPrimitives from "@radix-ui/react-switch";
 import clsx from "clsx";
 import * as React from "react";
+import { motion } from "framer-motion";
 
 import Label from "@/components/ion/Label";
 
@@ -26,30 +28,54 @@ type SwitchProps = React.ComponentPropsWithoutRef<
 
 /* ---------------------------------- Component --------------------------------- */
 
+const MotionSwitchRoot = motion(SwitchPrimitives.Root);
+const MotionSwitchThumb = motion(SwitchPrimitives.Thumb);
+
 const Switch = React.forwardRef<
   React.ElementRef<typeof SwitchPrimitives.Root>,
   SwitchProps
 >(
   (
-    { className, size = "md", required, label, description, helper, ...props },
+    { className, size = "md", required, label, description, helper, checked, ...props },
     ref
   ) => {
     const generatedId = React.useId();
     const id = props.id || generatedId;
 
+    const switchVariants = {
+      checked: {
+        backgroundColor: "#4ADE80", // Example primary color
+        transition: { duration: 0.2 },
+      },
+      unchecked: {
+        backgroundColor: "#D1D5DB", // Example on-disabled color
+        transition: { duration: 0.2 },
+      },
+    };
+
+    const thumbVariants = {
+      checked: {
+        x: size === "sm" ? 16 : size === "md" ? 24 : 20,
+        transition: { type: "spring", stiffness: 700, damping: 30 },
+      },
+      unchecked: {
+        x: 0,
+        transition: { type: "spring", stiffness: 700, damping: 30 },
+      },
+    };
+
     return (
       <span className="flex items-center gap-2 text-sm">
-        <SwitchPrimitives.Root
+        <MotionSwitchRoot
           id={id}
           ref={ref}
           aria-required={required}
           aria-describedby={description ? `${id}__description` : undefined}
           className={clsx(
-            "group",
-            "data-[state=checked]:focus-visible:primary-focus focus-visible:neutral-focus peer inline-flex shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent shadow-sm transition-colors",
+            "group peer inline-flex shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent shadow-sm transition-colors",
             "disabled:pointer-events-none disabled:bg-disabled",
             {
-              "data-[state=checked]:bg-primary data-[state=unchecked]:bg-on-disabled data-[state=unchecked]:hover:bg-soft":
+              "data-[state=checked]:focus-visible:primary-focus focus-visible:neutral-focus":
                 !props.disabled,
             },
             {
@@ -59,19 +85,23 @@ const Switch = React.forwardRef<
             },
             className
           )}
+          initial={checked ? "checked" : "unchecked"}
+          animate={checked ? "checked" : "unchecked"}
+          variants={switchVariants}
           {...props}
         >
-          <SwitchPrimitives.Thumb
+          <MotionSwitchThumb
             className={clsx(
-              "pointer-events-none block rounded-full bg-white shadow-lg ring-0 transition-transform group-disabled:bg-on-disabled group-disabled:shadow-none data-[state=unchecked]:translate-x-0",
+              "pointer-events-none block rounded-full bg-white shadow-lg ring-0 group-disabled:bg-on-disabled",
               {
-                "h-3 w-3 data-[state=checked]:translate-x-4": size === "sm",
-                "h-5 w-5 data-[state=checked]:translate-x-6": size === "md",
-                "h-6 w-6 data-[state=checked]:translate-x-5": size === "lg",
+                "h-3 w-3": size === "sm",
+                "h-5 w-5": size === "md",
+                "h-6 w-6": size === "lg",
               }
             )}
+            variants={thumbVariants}
           />
-        </SwitchPrimitives.Root>
+        </MotionSwitchRoot>
         {label && (
           <Label
             id={`${id}__label`}
