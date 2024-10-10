@@ -1,17 +1,3 @@
-/* a sleek and modern settings page component for a SaaS management dashboard, encapsulated in a floating card with subtle shadow and rounded corners. The component should feature a tabbed interface with smooth transitions between sections. Include the following tabs and settings:
- 
-General:
-Company name and logo upload
-Time zone selector
-Language preference dropdown
- 
-API & Integrations:
-API key management with a toggle to show/hide keys
-OAuth token generator with a copy-to-clipboard button
-Webhook URL configuration with test ping functionality
-Third-party integration toggles with connection status indicators
- */
-
 import React, { useState, useCallback, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Globe, Key, Upload, Copy, ArrowClockwise } from '@phosphor-icons/react';
@@ -20,6 +6,7 @@ import Select from '@/components/ion/Select';
 import { Tab, Tabs, TabsContent, TabsList } from '@/components/ion/Tabs';
 import Switch from '@/components/ion/Switch';
 import Button from '@/components/ion/Button';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const SettingsPage = () => {
   const [activeTab, setActiveTab] = useState('general');
@@ -127,9 +114,31 @@ const SettingsPage = () => {
               />
               <div className="mt-4 p-4 bg-container rounded-radius-sm">
                 <p className="font-semibold text-foreground">Production API Key</p>
-                <p className="text-sm text-secondary mt-1">
-                  {showApiKeys ? 'sk_live_1234567890abcdefghijklmnop' : '••••••••••••••••'}
-                </p>
+                <AnimatePresence exitBeforeEnter>
+                  {showApiKeys ? (
+                    <motion.p
+                      key="apiKeyVisible"
+                      className="text-sm text-secondary mt-1"
+                      initial={{ opacity: 0, y: -5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 5 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      sk_live_1234567890abcdefghijklmnop
+                    </motion.p>
+                  ) : (
+                    <motion.p
+                      key="apiKeyHidden"
+                      className="text-sm text-secondary mt-1"
+                      initial={{ opacity: 0, y: -5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 5 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      ••••••••••••••••
+                    </motion.p>
+                  )}
+                </AnimatePresence>
               </div>
             </div>
 
