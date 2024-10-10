@@ -1,6 +1,7 @@
 /* Weather card that displays weather and a suggestion of what to wear at a zip code */
 import React, { useState, useEffect } from 'react';
 import { CloudSun, CloudRain, CloudSnow, Wind, Drop, MapPin } from '@phosphor-icons/react';
+import { motion } from 'framer-motion';
 import Input from '@/components/ion/Input';
 import Divider from '@/components/ion/Divider';
 
@@ -54,8 +55,11 @@ const WeatherCard = () => {
   };
 
   return (
-    <div
+    <motion.div
       className="bg-background w-full max-w-md mx-auto p-6 rounded-radius-sm shadow-medium"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
     >
       <h2 className="text-2xl font-semibold text-foreground mb-4">Weather Check</h2>
       <div className="mb-4">
@@ -69,7 +73,11 @@ const WeatherCard = () => {
       {loading ? (
         <div className="text-center text-secondary">Loading weather data...</div>
       ) : weather.condition ? (
-        <div>
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+        >
           <div className="flex justify-between items-center mb-4">
             <div className="text-4xl font-bold text-primary">{weather.temperature}°C</div>
             {getWeatherIcon()}
@@ -88,14 +96,19 @@ const WeatherCard = () => {
             </div>
           </div>
           <Divider />
-          <div className="bg-neutral-container p-4 rounded-radius-sm mt-2">
+          <motion.div
+            className="bg-neutral-container p-4 rounded-radius-sm mt-2"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3 }}
+          >
             <p className="text-on-primary-container">{getClothingSuggestion()}</p>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       ) : (
         <div className="text-center text-secondary">Enter a ZIP code to check the weather</div>
       )}
-    </div>
+    </motion.div>
   );
 };
 
