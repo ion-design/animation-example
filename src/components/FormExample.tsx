@@ -9,6 +9,7 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import { useFormik } from "formik";
 import { type MouseEvent } from "react";
+import { motion } from "framer-motion";
 
 import Button from "@/components/ion/Button";
 import Input from "@/components/ion/Input";
@@ -29,14 +30,31 @@ function FormExample() {
 
   const { values, errors, touched, handleChange, handleBlur } = useFormik({
     initialValues: {
-          email: "",
+      email: "",
     },
     onSubmit: () => {},
   });
 
+  const containerVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut"
+      }
+    },
+  };
+
   return (
     <div className="bg-container h-[800px] w-[1200px] flex justify-center items-center">
-      <div className="bg-background w-1/3 flex flex-col justify-center items-center gap-5 p-5 rounded-radius-sm shadow-[0_4px_4px_0_rgba(0,0,0,0.25)]">
+      <motion.div
+        className="bg-background w-1/3 flex flex-col justify-center items-center gap-5 p-5 rounded-radius-sm shadow-[0_4px_4px_0_rgba(0,0,0,0.25)]"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
         <div className="w-full flex flex-col justify-center items-center gap-2.5 p-2.5">
           <div className="bg-on-neutral-container flex justify-center items-center p-4 rounded-full">
             <img
@@ -126,7 +144,7 @@ function FormExample() {
             Sign up now
           </Button>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

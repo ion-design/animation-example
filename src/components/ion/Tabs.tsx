@@ -3,6 +3,7 @@ import * as TabsPrimitive from "@radix-ui/react-tabs";
 import { cva } from "class-variance-authority";
 import clsx from "clsx";
 import * as React from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Tabs = TabsPrimitive.Root;
 
@@ -41,7 +42,10 @@ const TabsList = React.forwardRef<
     >
       {children}
       {type === "simple" && (
-        <div className={"absolute bottom-0 z-0 h-px w-full bg-stroke"} />
+        <motion.div
+          layout="position"
+          className={"absolute bottom-0 z-0 h-px w-full bg-stroke"}
+        />
       )}
     </TabsPrimitive.List>
   </TabTypeContext.Provider>
@@ -53,12 +57,25 @@ TabsList.displayName = TabsPrimitive.List.displayName;
 const TabsContent = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof TabsPrimitive.Content>
->(({ className, ...props }, ref) => (
+>(({ className, children, ...props }, ref) => (
   <TabsPrimitive.Content
     ref={ref}
+    asChild
     className={clsx("focus-visible:neutral-focus mt-2", className)}
     {...props}
-  />
+  >
+    <AnimatePresence initial={false}>
+      <motion.div
+        key={props.value}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -10 }}
+        transition={{ duration: 0.3 }}
+      >
+        {children}
+      </motion.div>
+    </AnimatePresence>
+  </TabsPrimitive.Content>
 ));
 TabsContent.displayName = TabsPrimitive.Content.displayName;
 
@@ -118,12 +135,26 @@ const Tab = React.forwardRef<
   return (
     <TabsPrimitive.Trigger
       ref={ref}
-      className={clsx(tabClassnames({ type, icon: !children }), className)}
+      className={clsx(tabClassnames({ type, icon: !!iconLeading || !!iconTrailing }), className)}
       {...props}
     >
-      {iconLeading}
+      {iconLeading && (
+        <motion.span
+          whileHover={{ scale: 1.05 }}
+          className="mr-2"
+        >
+          {iconLeading}
+        </motion.span>
+      )}
       {children}
-      {iconTrailing}
+      {iconTrailing && (
+        <motion.span
+          whileHover={{ scale: 1.05 }}
+          className="ml-2"
+        >
+          {iconTrailing}
+        </motion.span>
+      )}
     </TabsPrimitive.Trigger>
   );
 });

@@ -5,6 +5,7 @@ import { cva } from "class-variance-authority";
 import clsx from "clsx";
 import * as React from "react";
 import { twMerge } from "tailwind-merge";
+import { motion } from "framer-motion";
 
 /* ---------------------------------- Type --------------------------------- */
 
@@ -168,7 +169,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     return (
-      <button
+      <motion.button
         className={twMerge(
           clsx(
             buttonVariants({
@@ -186,12 +187,14 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           )
         )}
         ref={ref}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
         {...props}
       >
         {iconLeading}
         {children}
         {iconTrailing}
-      </button>
+      </motion.button>
     );
   }
 );

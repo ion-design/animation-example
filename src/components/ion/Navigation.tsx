@@ -5,6 +5,7 @@ import { cva } from "class-variance-authority";
 import clsx from "clsx";
 import * as React from "react";
 import { twMerge } from "tailwind-merge";
+import { motion } from "framer-motion";
 
 /* ---------------------------------- Component --------------------------------- */
 
@@ -128,53 +129,56 @@ const NavigationMenuLink = React.forwardRef<
     },
     ref
   ) => (
-    <NavigationMenuPrimitive.Link
-      ref={ref}
-      className={twMerge(
-        clsx(
-          navigationMenuLinkClassnames({
-            type,
-            selected,
-          }),
-          !children && "w-fit"
-        ),
-        className
-      )}
-      {...props}
-    >
-      <span className="flex items-center gap-2 truncate">
-        <Slot
-          className={twMerge(
-            clsx(
-              "shrink-0 text-subtle",
+    <NavigationMenuPrimitive.Link asChild {...props}>
+      <motion.a
+        ref={ref}
+        className={twMerge(
+          clsx(
+            navigationMenuLinkClassnames({
+              type,
+              selected,
+            }),
+            !children && "w-fit"
+          ),
+          className
+        )}
+        whileHover={{ scale: 1.02 }}
+        transition={{ duration: 0.2 }}
+      >
+        <span className="flex items-center gap-2 truncate">
+          <Slot
+            className={twMerge(
+              clsx(
+                "shrink-0 text-subtle",
+                type === "default" && {
+                  "text-subtle": !selected,
+                  "text-on-primary-container": selected,
+                  "group-hover:text-secondary": !selected,
+                },
+                type === "filled" && "text-on-primary"
+              )
+            )}
+          >
+            {iconLeading}
+          </Slot>
+          {children && <span className="truncate">{children}</span>} {extra}
+        </span>
+        {children && (
+          <Slot
+            className={clsx(
+              "shrink-0",
               type === "default" && {
                 "text-subtle": !selected,
                 "text-on-primary-container": selected,
-                "group-hover:text-secondary": !selected,
+                "group-hover:text-secondary": true,
               },
               type === "filled" && "text-on-primary"
-            )
-          )}
-        >
-          {iconLeading}
-        </Slot>
-        {children && <span className="truncate">{children}</span>} {extra}
-      </span>
-      {children && (
-        <Slot
-          className={clsx(
-            "shrink-0",
-            type === "default" && {
-              "text-subtle": !selected,
-              "text-on-primary-container": selected,
-              "group-hover:text-secondary": true,
-            },
-            type === "filled" && "text-on-primary"
-          )}
-        >
-          {iconTrailing}
-        </Slot>
-      )}
+            )}
+          >
+            {iconTrailing}
+          </Slot>
+        )}
+      </motion.a>
     </NavigationMenuPrimitive.Link>
   )
 );

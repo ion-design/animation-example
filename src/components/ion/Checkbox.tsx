@@ -6,6 +6,7 @@ import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import clsx from "clsx";
 import * as React from "react";
 import { twMerge } from "tailwind-merge";
+import { motion, AnimatePresence } from "framer-motion";
 
 import Label from "@/components/ion/Label";
 
@@ -28,6 +29,10 @@ export interface CheckboxProps {
 
 /* ---------------------------------- Component --------------------------------- */
 
+const MotionCheckboxRoot = motion(CheckboxPrimitive.Root);
+const MotionCheck = motion(Check);
+const MotionMinus = motion(Minus);
+
 const Checkbox = React.forwardRef<
   React.ElementRef<typeof CheckboxPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root> & CheckboxProps
@@ -42,7 +47,7 @@ const Checkbox = React.forwardRef<
 
     return (
       <span className={clsx("flex items-center gap-2", className)}>
-        <CheckboxPrimitive.Root
+        <MotionCheckboxRoot
           id={id}
           aria-required={required}
           aria-invalid={ariaInvalid}
@@ -63,24 +68,39 @@ const Checkbox = React.forwardRef<
             )
           )}
           {...props}
+          whileTap={{ scale: 0.95 }}
         >
           <CheckboxPrimitive.Indicator
             className={clsx("flex items-center justify-center")}
           >
-            <Check
-              size={12}
-              weight="bold"
-              className={
-                "z-10 hidden transition-none group-data-[state=checked]:block"
-              }
-            />
-            <Minus
-              size={12}
-              weight="bold"
-              className={"hidden group-data-[state=indeterminate]:block"}
-            />
+            <AnimatePresence initial={false}>
+              {props.checked && (
+                <MotionCheck
+                  key="check"
+                  size={12}
+                  weight="bold"
+                  className="z-10"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ duration: 0.2 }}
+                />
+              )}
+              {props.indeterminate && (
+                <MotionMinus
+                  key="minus"
+                  size={12}
+                  weight="bold"
+                  className=""
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ duration: 0.2 }}
+                />
+              )}
+            </AnimatePresence>
           </CheckboxPrimitive.Indicator>
-        </CheckboxPrimitive.Root>
+        </MotionCheckboxRoot>
         {label && (
           <Label
             id={`${id}__label`}

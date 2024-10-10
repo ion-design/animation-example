@@ -8,6 +8,18 @@ import React, { useState } from 'react';
 import { LockSimple, Check } from '@phosphor-icons/react/dist/ssr';
 import Button from '@/components/ion/Button';
 import Input from '@/components/ion/Input';
+import { motion, AnimatePresence } from 'framer-motion';
+
+const containerVariants = {
+  hidden: { opacity: 0, scale: 0.95 },
+  visible: { opacity: 1, scale: 1 },
+};
+
+const contentVariants = {
+  hidden: { opacity: 0, y: 20 },
+  enter: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -20 },
+};
 
 const SubscribeToContinueCard = () => {
   const [email, setEmail] = useState('');
@@ -18,11 +30,22 @@ const SubscribeToContinueCard = () => {
   };
 
   return (
-    <div
+    <motion.div
       className="bg-background w-full max-w-md mx-auto p-6 rounded-radius-md shadow-medium"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      transition={{ duration: 0.5, ease: 'easeOut' }}
     >
+      <AnimatePresence mode='wait'>
         {!isSubscribed ? (
-          <div
+          <motion.div
+            key="subscribe"
+            variants={contentVariants}
+            initial="hidden"
+            animate="enter"
+            exit="exit"
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
           >
             <div className="flex items-center justify-center mb-4">
               <LockSimple size={48} className="text-primary" weight="fill" />
@@ -52,10 +75,15 @@ const SubscribeToContinueCard = () => {
             <p className="text-subtle text-sm text-center mt-4">
               Limited time offer: Get 30% off your first month!
             </p>
-          </div>
+          </motion.div>
         ) : (
-          <div
+          <motion.div
             key="success"
+            variants={contentVariants}
+            initial="hidden"
+            animate="enter"
+            exit="exit"
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
             className="text-center"
           >
             <div className="flex items-center justify-center mb-4">
@@ -75,9 +103,10 @@ const SubscribeToContinueCard = () => {
             >
               Close
             </Button>
-          </div>
+          </motion.div>
         )}
-    </div>
+      </AnimatePresence>
+    </motion.div>
   );
 };
 
