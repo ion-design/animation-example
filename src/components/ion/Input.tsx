@@ -2,6 +2,7 @@
 import clsx from "clsx";
 import * as React from "react";
 import { twMerge } from "tailwind-merge";
+import { motion } from "framer-motion";
 
 import Hint from "./Hint";
 import Label from "./Label";
@@ -123,6 +124,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const generatedId = React.useId();
     const id = props.id ?? generatedId;
     const ariaInvalid = props["aria-invalid"] ?? !!error;
+    const [isFocused, setIsFocused] = React.useState(false);
 
     return (
       <div className={className}>
@@ -138,40 +140,48 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {label}
           </Label>
         )}
-        <InputContainer
-          className={clsx("bg-background", inputClassName)}
-          error={error}
-          disabled={props.disabled}
+        <motion.div
+          initial={false}
+          animate={isFocused ? { scale: 1.02 } : { scale: 1 }}
+          transition={{ duration: 0.2 }}
         >
-          {iconLeading && (
-            <span
-              className={clsx("text-foreground", {
-                "text-on-disabled": props.disabled,
-              })}
-            >
-              {iconLeading}
-            </span>
-          )}
-          <input
-            id={id}
-            ref={ref}
-            aria-required={required}
-            aria-invalid={ariaInvalid}
-            aria-describedby={hint ? `${id}__hint` : undefined}
-            className={inputClassNames}
-            type={type}
-            {...props}
-          />
-          {iconTrailing && (
-            <span
-              className={clsx("text-foreground", {
-                "text-on-disabled": props.disabled,
-              })}
-            >
-              {iconTrailing}
-            </span>
-          )}
-        </InputContainer>
+          <InputContainer
+            className={clsx("bg-background", inputClassName)}
+            error={error}
+            disabled={props.disabled}
+          >
+            {iconLeading && (
+              <span
+                className={clsx("text-foreground", {
+                  "text-on-disabled": props.disabled,
+                })}
+              >
+                {iconLeading}
+              </span>
+            )}
+            <input
+              id={id}
+              ref={ref}
+              aria-required={required}
+              aria-invalid={ariaInvalid}
+              aria-describedby={hint ? `${id}__hint` : undefined}
+              className={inputClassNames}
+              type={type}
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => setIsFocused(false)}
+              {...props}
+            />
+            {iconTrailing && (
+              <span
+                className={clsx("text-foreground", {
+                  "text-on-disabled": props.disabled,
+                })}
+              >
+                {iconTrailing}
+              </span>
+            )}
+          </InputContainer>
+        </motion.div>
         {hint && (
           <Hint
             id={`${id}__hint`}
