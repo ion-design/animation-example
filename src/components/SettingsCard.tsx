@@ -114,7 +114,7 @@ const SettingsPage = () => {
               />
               <div className="mt-4 p-4 bg-container rounded-radius-sm">
                 <p className="font-semibold text-foreground">Production API Key</p>
-                <AnimatePresence exitBeforeEnter>
+                <AnimatePresence mode="wait">
                   {showApiKeys ? (
                     <motion.p
                       key="apiKeyVisible"
