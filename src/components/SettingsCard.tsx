@@ -81,14 +81,11 @@ const SettingsPage = () => {
 
             <div>
               <label className="block text-sm font-medium text-secondary mb-2">Company Logo</label>
-              <motion.div
+              <div
                 {...getRootProps()}
                 className={`flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-radius-sm cursor-pointer ${
                   isDragActive ? 'bg-container-high' : 'bg-container hover:bg-container-high'
                 }`}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                transition={{ duration: 0.2 }}
               >
                 <input {...getInputProps()} />
                 <Upload size={48} className="mb-3 text-secondary" />
@@ -96,7 +93,7 @@ const SettingsPage = () => {
                   <span className="font-semibold">Click to upload</span> or drag and drop
                 </p>
                 <p className="text-xs text-subtle">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
-              </motion.div>
+              </div>
             </div>
 
             <Select

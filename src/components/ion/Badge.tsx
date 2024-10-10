@@ -191,7 +191,7 @@ export const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
     ref
   ) => {
     return (
-      <motion.div
+      <div
         ref={ref}
         className={clsx(
           badgeClassNames({
@@ -202,15 +202,12 @@ export const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
           }),
           className
         )}
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.2 }}
         {...props}
       >
         {iconLeading}
         {children}
         {iconTrailing}
-      </motion.div>
+      </div>
     );
   }
 );

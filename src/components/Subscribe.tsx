@@ -37,7 +37,7 @@ const SubscribeToContinueCard = () => {
       animate="visible"
       transition={{ duration: 0.5, ease: 'easeOut' }}
     >
-      <AnimatePresence exitBeforeEnter>
+      <AnimatePresence mode='wait'>
         {!isSubscribed ? (
           <motion.div
             key="subscribe"

@@ -100,6 +100,7 @@ const ImageGallery: React.FC = () => {
             </motion.div>
           </motion.div>
         )
+        }
       </AnimatePresence>
     </div>
   );

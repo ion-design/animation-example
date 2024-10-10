@@ -4,7 +4,6 @@ import * as AvatarPrimitive from "@radix-ui/react-avatar";
 import { cva } from "class-variance-authority";
 import clsx from "clsx";
 import * as React from "react";
-import { motion } from "framer-motion";
 
 /* ---------------------------------- Component --------------------------------- */
 
@@ -124,10 +123,7 @@ const AvatarStatus = React.forwardRef<
 >(({ className, type, location, size, variant, ...props }, ref) => {
   const iconSize = size === "sm" ? 6 : 8;
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.3 }}
+    <div
       ref={ref}
       className={clsx(
         avatarStatusClassNames({
@@ -143,7 +139,7 @@ const AvatarStatus = React.forwardRef<
       {type === "check" && <Check weight="bold" size={iconSize} />}
       {type === "plus" && <Plus weight="bold" size={iconSize} />}
       {type === "delete" && <X weight="bold" size={iconSize} />}
-    </motion.div>
+    </div>
   );
 });
 AvatarStatus.displayName = "AvatarStatus";
@@ -156,7 +152,7 @@ const AvatarTitle = React.forwardRef<
     size: AvatarProps["size"];
   }
 >(({ className, size, ...props }, ref) => (
-  <motion.h3
+  <h3
     ref={ref}
     className={clsx(
       "text-foreground font-semibold",
@@ -167,9 +163,6 @@ const AvatarTitle = React.forwardRef<
       },
       className
     )}
-    initial={{ opacity: 0, y: 10 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.3, delay: 0.1 }}
     {...props}
   />
 ));
@@ -183,7 +176,7 @@ const AvatarSubtitle = React.forwardRef<
     size: AvatarProps["size"];
   }
 >(({ className, size, ...props }, ref) => (
-  <motion.p
+  <p
     ref={ref}
     className={clsx(
       "text-subtle font-medium",
@@ -194,9 +187,6 @@ const AvatarSubtitle = React.forwardRef<
       },
       className
     )}
-    initial={{ opacity: 0, y: 10 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.3, delay: 0.2 }}
     {...props}
   />
 ));
@@ -273,76 +263,66 @@ const Avatar = React.forwardRef<
     const imageAlt = alt ?? "Avatar Image";
     const fallbackAlt = alt ?? "Avatar Fallback";
     return (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
+      <div
         className={clsx("flex items-center shrink-0", {
           "gap-x-3": size === "lg" || size === "md",
           "gap-x-2": size === "sm",
         })}
       >
-        <motion.div
-          initial={{ scale: 0.95 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 0.3 }}
-          className="relative"
+        <AvatarPrimitive.Root
+          ref={ref}
+          className={clsx(
+            {
+              "relative flex shrink-0 flex-col items-center justify-center bg-disabled border border-background": true,
+              "h-[60px] w-[60px]": size === "lg",
+              "h-12 w-12": size === "md",
+              "h-8 w-8": size === "sm",
+              "rounded-full": variant === "circle",
+              "rounded-radius-md": variant === "square",
+            },
+            className
+          )}
+          {...props}
         >
-          <AvatarPrimitive.Root
-            ref={ref}
+          {topStatus && (
+            <AvatarStatus
+              location="top"
+              type={topStatus}
+              size={size}
+              variant={variant}
+            />
+          )}
+          {bottomStatus && (
+            <AvatarStatus
+              location="bottom"
+              type={bottomStatus}
+              size={size}
+              variant={variant}
+            />
+          )}
+          <AvatarPrimitive.Image
             className={clsx(
+              "aspect-square object-cover",
               {
-                "relative flex shrink-0 flex-col items-center justify-center bg-disabled border border-background": true,
-                "h-[60px] w-[60px]": size === "lg",
-                "h-12 w-12": size === "md",
-                "h-8 w-8": size === "sm",
                 "rounded-full": variant === "circle",
                 "rounded-radius-md": variant === "square",
+                "rounded-radius-sm": variant === "square" && size === "sm",
               },
               className
             )}
+            src={src}
+            aria-label={imageAlt}
+            alt={imageAlt}
             {...props}
+          />
+          <AvatarFallback
+            initials={initials}
+            size={size}
+            aria-label={fallbackAlt}
           >
-            {topStatus && (
-              <AvatarStatus
-                location="top"
-                type={topStatus}
-                size={size}
-                variant={variant}
-              />
-            )}
-            {bottomStatus && (
-              <AvatarStatus
-                location="bottom"
-                type={bottomStatus}
-                size={size}
-                variant={variant}
-              />
-            )}
-            <AvatarPrimitive.Image
-              className={clsx(
-                "aspect-square object-cover",
-                {
-                  "rounded-full": variant === "circle",
-                  "rounded-radius-md": variant === "square",
-                  "rounded-radius-sm": variant === "square" && size === "sm",
-                },
-                className
-              )}
-              src={src}
-              aria-label={imageAlt}
-              alt={imageAlt}
-              {...props}
-            />
-            <AvatarFallback
-              initials={initials}
-              size={size}
-              aria-label={fallbackAlt}
-            >
-              {initials ? initials : fallback}
-            </AvatarFallback>
-          </AvatarPrimitive.Root>
-        </motion.div>
+            {initials ? initials : fallback}
+          </AvatarFallback>
+        </AvatarPrimitive.Root>
         {title && (
           <div className="flex flex-col">
             <AvatarTitle size={size}>{title}</AvatarTitle>
@@ -351,7 +331,7 @@ const Avatar = React.forwardRef<
             )}
           </div>
         )}
-      </motion.div>
+      </div>
     );
   }
 );
