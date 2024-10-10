@@ -169,7 +169,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     return (
-      <button
+      <motion.button
         className={twMerge(
           clsx(
             buttonVariants({
@@ -187,12 +187,14 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           )
         )}
         ref={ref}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
         {...props}
       >
         {iconLeading}
         {children}
         {iconTrailing}
-      </button>
+      </motion.button>
     );
   }
 );
