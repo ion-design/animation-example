@@ -3,8 +3,11 @@
 import * as SeparatorPrimitive from "@radix-ui/react-separator";
 import clsx from "clsx";
 import * as React from "react";
+import { motion } from "framer-motion";
 
 /* ---------------------------------- Component --------------------------------- */
+
+const MotionSeparatorRoot = motion(SeparatorPrimitive.Root);
 
 const Divider = React.forwardRef<
   React.ElementRef<typeof SeparatorPrimitive.Root>,
@@ -14,7 +17,17 @@ const Divider = React.forwardRef<
 >(({ className, children, decorative = true, ...props }, ref) => (
   <div className={clsx("relative w-full", className)}>
     <div className={clsx("absolute inset-0 flex items-center p-[inherit]")}>
-      <SeparatorPrimitive.Root ref={ref} decorative={decorative} orientation={"horizontal"} className={clsx("bg-outline-sub", "h-[1px] w-full")} {...props} />
+      <MotionSeparatorRoot
+        ref={ref}
+        decorative={decorative}
+        orientation={"horizontal"}
+        className={clsx("bg-outline-sub", "h-[1px] w-full")}
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: 1 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        style={{ originX: 0.5 }}
+        {...props}
+      />
     </div>
 
     <div className="relative flex justify-center text-xs uppercase">
