@@ -30,7 +30,7 @@ const SettingsPage = () => {
   const [showApiKeys, setShowApiKeys] = useState(false);
   const [webhookUrl, setWebhookUrl] = useState('');
 
-  const onDrop = useCallback((acceptedFiles) => {
+  const onDrop = useCallback((acceptedFiles: any[]) => {
     setCompanyLogo(acceptedFiles[0]);
   }, []);
 
