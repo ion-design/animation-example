@@ -11,7 +11,7 @@ OAuth token generator with a copy-to-clipboard button
 Webhook URL configuration with test ping functionality
 Third-party integration toggles with connection status indicators
  */
-
+ 
 import React, { useState, useCallback, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Globe, Key, Upload, Copy, ArrowClockwise } from '@phosphor-icons/react';
@@ -20,6 +20,7 @@ import Select from '@/components/ion/Select';
 import { Tab, Tabs, TabsContent, TabsList } from '@/components/ion/Tabs';
 import Switch from '@/components/ion/Switch';
 import Button from '@/components/ion/Button';
+import { motion } from 'framer-motion';
 
 const SettingsPage = () => {
   const [activeTab, setActiveTab] = useState('general');
@@ -56,8 +57,11 @@ const SettingsPage = () => {
   }, []);
 
   return (
-    <div
+    <motion.div
       className="bg-background w-full max-w-4xl mx-auto p-8 rounded-radius-lg shadow-medium"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: 'easeOut' }}
     >
       <h1 className="text-3xl font-semibold text-foreground mb-6">Settings</h1>
 
@@ -77,11 +81,14 @@ const SettingsPage = () => {
 
             <div>
               <label className="block text-sm font-medium text-secondary mb-2">Company Logo</label>
-              <div
+              <motion.div
                 {...getRootProps()}
                 className={`flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-radius-sm cursor-pointer ${
                   isDragActive ? 'bg-container-high' : 'bg-container hover:bg-container-high'
                 }`}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ duration: 0.2 }}
               >
                 <input {...getInputProps()} />
                 <Upload size={48} className="mb-3 text-secondary" />
@@ -89,7 +96,7 @@ const SettingsPage = () => {
                   <span className="font-semibold">Click to upload</span> or drag and drop
                 </p>
                 <p className="text-xs text-subtle">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
-              </div>
+              </motion.div>
             </div>
 
             <Select
@@ -125,12 +132,17 @@ const SettingsPage = () => {
                 checked={showApiKeys}
                 onCheckedChange={setShowApiKeys}
               />
-              <div className="mt-4 p-4 bg-container rounded-radius-sm">
+              <motion.div
+                className="mt-4 p-4 bg-container rounded-radius-sm"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: showApiKeys ? 1 : 0 }}
+                transition={{ duration: 0.3 }}
+              >
                 <p className="font-semibold text-foreground">Production API Key</p>
                 <p className="text-sm text-secondary mt-1">
                   {showApiKeys ? 'sk_live_1234567890abcdefghijklmnop' : '••••••••••••••••'}
                 </p>
-              </div>
+              </motion.div>
             </div>
 
             <div>
@@ -169,17 +181,22 @@ const SettingsPage = () => {
               <h2 className="text-xl font-semibold text-foreground mb-4">Third-party Integrations</h2>
               <div className="space-y-4">
                 {['Slack', 'Google Analytics'].map((integration) => (
-                  <div key={integration} className="flex items-center justify-between p-4 bg-container rounded-radius-sm">
+                  <motion.div
+                    key={integration}
+                    className="flex items-center justify-between p-4 bg-container rounded-radius-sm"
+                    whileHover={{ backgroundColor: '#f3f4f6' }}
+                    transition={{ duration: 0.2 }}
+                  >
                     <span className="font-semibold text-foreground">{integration}</span>
                     <Switch />
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             </div>
           </div>
         </TabsContent>
       </Tabs>
-    </div>
+    </motion.div>
   );
 }
 
