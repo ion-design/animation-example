@@ -4,6 +4,7 @@ import * as AvatarPrimitive from "@radix-ui/react-avatar";
 import { cva } from "class-variance-authority";
 import clsx from "clsx";
 import * as React from "react";
+import { motion } from "framer-motion";
 
 /* ---------------------------------- Component --------------------------------- */
 
@@ -123,7 +124,7 @@ const AvatarStatus = React.forwardRef<
 >(({ className, type, location, size, variant, ...props }, ref) => {
   const iconSize = size === "sm" ? 6 : 8;
   return (
-    <div
+    <motion.div
       ref={ref}
       className={clsx(
         avatarStatusClassNames({
@@ -134,12 +135,14 @@ const AvatarStatus = React.forwardRef<
         }),
         className
       )}
+      initial={{ scale: 0 }}
+      animate={{ scale: 1 }}
       {...props}
     >
       {type === "check" && <Check weight="bold" size={iconSize} />}
       {type === "plus" && <Plus weight="bold" size={iconSize} />}
       {type === "delete" && <X weight="bold" size={iconSize} />}
-    </div>
+    </motion.div>
   );
 });
 AvatarStatus.displayName = "AvatarStatus";
@@ -263,11 +266,13 @@ const Avatar = React.forwardRef<
     const imageAlt = alt ?? "Avatar Image";
     const fallbackAlt = alt ?? "Avatar Fallback";
     return (
-      <div
+      <motion.div
         className={clsx("flex items-center shrink-0", {
           "gap-x-3": size === "lg" || size === "md",
           "gap-x-2": size === "sm",
         })}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
       >
         <AvatarPrimitive.Root
           ref={ref}
@@ -306,7 +311,8 @@ const Avatar = React.forwardRef<
               {
                 "rounded-full": variant === "circle",
                 "rounded-radius-md": variant === "square",
-                "rounded-radius-sm": variant === "square" && size === "sm",
+                "rounded-radius-sm":
+                  variant === "square" && size === "sm",
               },
               className
             )}
@@ -331,7 +337,7 @@ const Avatar = React.forwardRef<
             )}
           </div>
         )}
-      </div>
+      </motion.div>
     );
   }
 );
