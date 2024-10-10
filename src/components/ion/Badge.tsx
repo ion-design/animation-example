@@ -2,6 +2,7 @@
 import { cva } from "class-variance-authority";
 import clsx from "clsx";
 import React from "react";
+import { motion } from "framer-motion";  // Added import
 
 const badgeClassNames = cva(
   ["font-semibold", "rounded-full", "shrink-0", "whitespace-nowrap", "border"],
@@ -190,7 +191,7 @@ export const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
     ref
   ) => {
     return (
-      <div
+      <motion.div
         ref={ref}
         className={clsx(
           badgeClassNames({
@@ -201,12 +202,15 @@ export const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
           }),
           className
         )}
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.2 }}
         {...props}
       >
         {iconLeading}
         {children}
         {iconTrailing}
-      </div>
+      </motion.div>
     );
   }
 );

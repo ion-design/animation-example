@@ -3,6 +3,7 @@ import clsx from "clsx";
 import React, { useEffect, useRef } from "react";
 import { type UseInputOptions, useInput } from "react-day-picker";
 import { twMerge } from "tailwind-merge";
+import { motion } from "framer-motion";
 
 import { Calendar } from "./Calendar";
 import Hint from "@/components/ion/Hint";
@@ -116,7 +117,10 @@ function Datepicker({
         }}
       >
         <PopoverTrigger asChild>
-          <span
+          <motion.span
+            initial={false}
+            animate={inputFocused ? { scale: 1.02 } : { scale: 1 }}
+            transition={{ duration: 0.2 }}
             className={twMerge(
               clsx(
                 inputContainerClasses({
@@ -162,7 +166,7 @@ function Datepicker({
               {...inputProps}
             />
             {iconTrailing}
-          </span>
+          </motion.span>
         </PopoverTrigger>
         <PopoverContent
           className="w-auto px-5 py-8 border border-stroke-strong"

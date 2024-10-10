@@ -19,6 +19,8 @@ import Hint from "@/components/ion/Hint";
 import { inputClassNames, InputContainer } from "@/components/ion/Input";
 import Label from "@/components/ion/Label";
 
+import { motion } from "framer-motion";
+
 /** Credit to https://github.com/mantinedev/mantine/blob/master/packages/@mantine/core/src/components/NumberInput/NumberInput.tsx */
 
 /* ---------------------------------- Util --------------------------------- */
@@ -50,7 +52,7 @@ function isValidNumber(
  * Get the number of decimal places in a number
  */
 function getDecimalPlaces(inputValue: number | string) {
-  const match = String(inputValue).match(/(?:.(d+))?(?:[eE]([+-]?d+))?$/);
+  const match = String(inputValue).match(/(?:\.(\d+))?(?:[eE]([+-]?\d+))?$/);
   if (!match) {
     return 0;
   }
@@ -376,7 +378,8 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
           )}
           {showControls && (
             <div className="flex gap-1 items-center px-2">
-              <button
+              <motion.button
+                whileTap={{ scale: 0.9 }}
                 tabIndex={-1}
                 onClick={(e) => {
                   e.preventDefault();
@@ -391,9 +394,10 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
                 aria-label="Decrement"
               >
                 <Minus weight="bold" className="w-[10px] h-[10px]" />
-              </button>
+              </motion.button>
 
-              <button
+              <motion.button
+                whileTap={{ scale: 0.9 }}
                 tabIndex={-1}
                 onClick={(e) => {
                   e.preventDefault();
@@ -408,7 +412,7 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
                 aria-label="Increment"
               >
                 <Plus weight="bold" className="w-[10px] h-[10px]" />
-              </button>
+              </motion.button>
             </div>
           )}
         </InputContainer>

@@ -1,6 +1,7 @@
 // Generated with Ion on 10/10/2024, 7:45:40 AM
 // Figma Link: https://www.figma.com/design/GzGS1XBtO8fnXGsjKDPiIf?node-id=10:6138
 "use client";
+import { motion } from "framer-motion";
 import { Code, User } from "@phosphor-icons/react/dist/ssr";
 import clsx from "clsx";
 import { type MouseEvent, useState } from "react";
@@ -31,11 +32,14 @@ function ProjectCard({
   }
 
   return (
-    <div
+    <motion.div
       className={clsx(
         "bg-background w-[400px] flex flex-col justify-center items-center rounded-radius-sm shadow-[0_4px_20px_0_rgba(0,0,0,0.1)]",
         className
       )}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: 'easeOut' }}
     >
       <div className="w-full flex flex-col gap-5 px-10 py-5">
         <div className="text-lg font-semibold text-foreground">
@@ -89,7 +93,7 @@ function ProjectCard({
           Confirm
         </Button>
       </div>
-    </div>
+    </motion.div>
   );
 }
 export default ProjectCard;

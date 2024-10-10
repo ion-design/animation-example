@@ -11,6 +11,8 @@ import {
 import clsx from "clsx";
 import { type MouseEvent } from "react";
 
+import { motion } from "framer-motion";
+
 import Avatar from "@/components/ion/Avatar";
 import Button from "@/components/ion/Button";
 import Divider from "@/components/ion/Divider";
@@ -34,11 +36,14 @@ function ProfileCard({
   }
 
   return (
-    <div
+    <motion.div
       className={clsx(
         "bg-background w-[400px] flex flex-col gap-3 px-8 py-5 rounded-radius-sm shadow-[0_4px_4px_0_rgba(0,0,0,0.25)]",
         className
       )}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
     >
       <Avatar
         size="lg"
@@ -97,7 +102,7 @@ function ProfileCard({
           View Profile
         </Button>
       </div>
-    </div>
+    </motion.div>
   );
 }
 export default ProfileCard;
