@@ -3,6 +3,7 @@ import * as TabsPrimitive from "@radix-ui/react-tabs";
 import { cva } from "class-variance-authority";
 import clsx from "clsx";
 import * as React from "react";
+import { motion } from "framer-motion";
 
 const Tabs = TabsPrimitive.Root;
 
@@ -50,13 +51,19 @@ TabsList.displayName = TabsPrimitive.List.displayName;
 
 /* ---------------------------------- Component --------------------------------- */
 
+const MotionTabsContent = motion(TabsPrimitive.Content);
+
 const TabsContent = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof TabsPrimitive.Content>
 >(({ className, ...props }, ref) => (
-  <TabsPrimitive.Content
+  <MotionTabsContent
     ref={ref}
     className={clsx("focus-visible:neutral-focus mt-2", className)}
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    transition={{ duration: 0.2 }}
     {...props}
   />
 ));

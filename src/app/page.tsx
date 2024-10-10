@@ -8,6 +8,7 @@ import RevenueCard from "@/components/ion/RevenueCard";
 import SideNavigation from "@/components/ion/SideNavigation";
 import TokenMetric from "@/components/TokenMetric";
 import Badge from "@/components/ion/Badge";
+import { motion } from "framer-motion";
 
 function ExamplePage() {
   return (
@@ -15,11 +16,24 @@ function ExamplePage() {
       <SideNavigation />
       <div className="bg-container flex-1 h-full w-full flex justify-center items-center gap-5 p-10">
         <div className="w-fit flex flex-col gap-5">
-          <RevenueCard />
-            <TokenMetric badge={<Badge color="green">+5.2%</Badge>} title="Total Revenue" metric="$1,200" />
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <RevenueCard />
+          </motion.div>
+          <TokenMetric
+            badge={<Badge color="green">+5.2%</Badge>}
+            title="Total Revenue"
+            metric="$1,200"
+          />
         </div>
         <div className="w-fit flex flex-col gap-5">
-          <ProfileCard handle="@SkyHighSam" name="Samuel Barnholdt" />
+          <ProfileCard
+            handle="@SkyHighSam"
+            name="Samuel Barnholdt"
+          />
           <ProjectCard projectName="Project Details" />
         </div>
       </div>

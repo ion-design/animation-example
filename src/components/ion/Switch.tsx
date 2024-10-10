@@ -4,6 +4,7 @@
 import * as SwitchPrimitives from "@radix-ui/react-switch";
 import clsx from "clsx";
 import * as React from "react";
+import { motion } from "framer-motion";
 
 import Label from "@/components/ion/Label";
 
@@ -25,6 +26,8 @@ type SwitchProps = React.ComponentPropsWithoutRef<
 };
 
 /* ---------------------------------- Component --------------------------------- */
+
+const MotionThumb = motion(SwitchPrimitives.Thumb);
 
 const Switch = React.forwardRef<
   React.ElementRef<typeof SwitchPrimitives.Root>,
@@ -61,7 +64,9 @@ const Switch = React.forwardRef<
           )}
           {...props}
         >
-          <SwitchPrimitives.Thumb
+          <MotionThumb
+            layout
+            transition={{ type: "spring", stiffness: 700, damping: 30 }}
             className={clsx(
               "pointer-events-none block rounded-full bg-white shadow-lg ring-0 transition-transform group-disabled:bg-on-disabled group-disabled:shadow-none data-[state=unchecked]:translate-x-0",
               {
