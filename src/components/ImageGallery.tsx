@@ -1,6 +1,7 @@
 /* Design a responsive image gallery with a masonry layout. Include hover effects that show image details and a lightbox feature for full-screen viewing. */
 import React, { useState } from 'react';
 import { X, MagnifyingGlass } from '@phosphor-icons/react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface Image {
   id: string;
@@ -25,17 +26,25 @@ const ImageGallery: React.FC = () => {
     <div className="container mx-auto px-4 py-8">
       <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4">
         {images.map((image) => (
-          <div
+          <motion.div
             key={image.id}
             className="relative mb-4 break-inside-avoid"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: Number(image.id) * 0.1 }}
           >
-            <img
+            <motion.img
               src={image.src}
               alt={image.title}
               className="w-full rounded-md"
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.3 }}
             />
-            <div
-              className="absolute inset-0 flex flex-col justify-end p-4 bg-gradient-to-t from-black/60 to-transparent rounded-md opacity-0 hover:opacity-100 transition-opacity"
+            <motion.div
+              className="absolute inset-0 flex flex-col justify-end p-4 bg-gradient-to-t from-black/60 to-transparent rounded-md"
+              initial={{ opacity: 0 }}
+              whileHover={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
             >
               <h3 className="text-white text-lg font-semibold">{image.title}</h3>
               <p className="text-white text-sm">{image.description}</p>
@@ -45,37 +54,53 @@ const ImageGallery: React.FC = () => {
               >
                 <MagnifyingGlass size={24} />
               </button>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         ))}
       </div>
+      <AnimatePresence>
         {selectedImage && (
-          <div
+          <motion.div
             className="fixed inset-0 bg-black/80 flex items-center justify-center z-50"
             onClick={() => setSelectedImage(null)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
           >
-            <div
+            <motion.div
               className="relative max-w-4xl max-h-[90vh] overflow-hidden rounded-lg"
               onClick={(e) => e.stopPropagation()}
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ duration: 0.3 }}
             >
               <img
                 src={selectedImage.src}
                 alt={selectedImage.title}
                 className="w-full h-full object-contain"
               />
-              <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
+              <motion.div
+                className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent"
+                initial={{ y: 50, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              >
                 <h3 className="text-white text-xl font-semibold">{selectedImage.title}</h3>
                 <p className="text-white text-sm mt-1">{selectedImage.description}</p>
-              </div>
-              <button
+              </motion.div>
+              <motion.button
                 onClick={() => setSelectedImage(null)}
                 className="absolute top-4 right-4 text-white hover:text-blue-400 transition-colors"
+                whileHover={{ scale: 1.1 }}
+                transition={{ duration: 0.2 }}
               >
                 <X size={24} />
-              </button>
-            </div>
-          </div>
-        )}
+              </motion.button>
+            </motion.div>
+          </motion.div>
+        )
+      </AnimatePresence>
     </div>
   );
 };
