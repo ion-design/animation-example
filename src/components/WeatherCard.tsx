@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { CloudSun, CloudRain, CloudSnow, Wind, Drop, MapPin } from '@phosphor-icons/react';
 import Input from '@/components/ion/Input';
 import Divider from '@/components/ion/Divider';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const WeatherCard = () => {
   const [zipCode, setZipCode] = useState('');
@@ -54,8 +55,11 @@ const WeatherCard = () => {
   };
 
   return (
-    <div
+    <motion.div
       className="bg-background w-full max-w-md mx-auto p-6 rounded-radius-sm shadow-medium"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
     >
       <h2 className="text-2xl font-semibold text-foreground mb-4">Weather Check</h2>
       <div className="mb-4">
@@ -66,36 +70,67 @@ const WeatherCard = () => {
           iconLeading={<MapPin size={20} />}
         />
       </div>
-      {loading ? (
-        <div className="text-center text-secondary">Loading weather data...</div>
-      ) : weather.condition ? (
-        <div>
-          <div className="flex justify-between items-center mb-4">
-            <div className="text-4xl font-bold text-primary">{weather.temperature}°C</div>
-            {getWeatherIcon()}
-          </div>
-          <div className="mb-4">
-            <div className="text-lg font-semibold text-foreground capitalize">{weather.condition}</div>
-            <div className="text-secondary">
-              <div className="flex items-center">
-                <Drop size={20} className="mr-2" />
-                <span>Humidity: {weather.humidity}%</span>
-              </div>
-              <div className="flex items-center">
-                <Wind size={20} className="mr-2" />
-                <span>Wind: {weather.windSpeed} km/h</span>
+      <AnimatePresence>
+        {loading ? (
+          <motion.div
+            className="text-center text-secondary"
+            key="loading"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            Loading weather data...
+          </motion.div>
+        ) : weather.condition ? (
+          <motion.div
+            key="weatherInfo"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+          >
+            <div className="flex justify-between items-center mb-4">
+              <div className="text-4xl font-bold text-primary">{weather.temperature}°C</div>
+              {getWeatherIcon()}
+            </div>
+            <div className="mb-4">
+              <div className="text-lg font-semibold text-foreground capitalize">{weather.condition}</div>
+              <div className="text-secondary">
+                <div className="flex items-center">
+                  <Drop size={20} className="mr-2" />
+                  <span>Humidity: {weather.humidity}%</span>
+                </div>
+                <div className="flex items-center">
+                  <Wind size={20} className="mr-2" />
+                  <span>Wind: {weather.windSpeed} km/h</span>
+                </div>
               </div>
             </div>
-          </div>
-          <Divider />
-          <div className="bg-neutral-container p-4 rounded-radius-sm mt-2">
-            <p className="text-on-primary-container">{getClothingSuggestion()}</p>
-          </div>
-        </div>
-      ) : (
-        <div className="text-center text-secondary">Enter a ZIP code to check the weather</div>
-      )}
-    </div>
+            <Divider />
+            <motion.div
+              className="bg-neutral-container p-4 rounded-radius-sm mt-2"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3, duration: 0.5 }}
+            >
+              <p className="text-on-primary-container">{getClothingSuggestion()}</p>
+            </motion.div>
+          </motion.div>
+        ) : (
+          <motion.div
+            className="text-center text-secondary"
+            key="prompt"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            Enter a ZIP code to check the weather
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 };
 
