@@ -7,6 +7,7 @@ import * as SelectPrimitive from "@radix-ui/react-select";
 import clsx from "clsx";
 import * as React from "react";
 import { twMerge } from "tailwind-merge";
+import { motion } from "framer-motion";
 
 import Hint from "@/components/ion/Hint";
 import Label from "@/components/ion/Label";
@@ -16,8 +17,6 @@ const SelectBase = SelectPrimitive.Root;
 const SelectGroup = SelectPrimitive.Group;
 
 const SelectValue = SelectPrimitive.Value;
-
-/* ---------------------------------- Component --------------------------------- */
 
 export const selectTriggerClassName = (error?: boolean | string) =>
   twMerge(
@@ -56,8 +55,6 @@ const SelectTrigger = React.forwardRef<
 ));
 SelectTrigger.displayName = SelectPrimitive.Trigger.displayName;
 
-/* ---------------------------------- Component --------------------------------- */
-
 const SelectContent = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content>
@@ -89,7 +86,6 @@ const SelectContent = React.forwardRef<
 ));
 SelectContent.displayName = SelectPrimitive.Content.displayName;
 
-/* ---------------------------------- Component --------------------------------- */
 const SelectLabel = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Label>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Label>
@@ -101,8 +97,6 @@ const SelectLabel = React.forwardRef<
   />
 ));
 SelectLabel.displayName = SelectPrimitive.Label.displayName;
-
-/* ---------------------------------- Component --------------------------------- */
 
 const SelectItem = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Item>,
@@ -142,8 +136,6 @@ const SelectItem = React.forwardRef<
 );
 SelectItem.displayName = SelectPrimitive.Item.displayName;
 
-/* ---------------------------------- Component --------------------------------- */
-
 const SelectSeparator = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Separator>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Separator>
@@ -156,8 +148,6 @@ const SelectSeparator = React.forwardRef<
 ));
 SelectSeparator.displayName = SelectPrimitive.Separator.displayName;
 
-/* ---------------------------------- Type --------------------------------- */
-
 export interface Option {
   label: string;
   value: string;
@@ -169,35 +159,20 @@ export interface Option {
 }
 
 export interface SelectProps extends SelectPrimitive.SelectProps {
-  /** HTML ID of the input */
   id?: string;
-  /** Select options */
   options: Option[];
-  /** Placeholder of the select */
   placeholder?: string;
-  /** Leading icon of the select */
   iconLeading?: React.ReactNode;
-  /** Label of the select */
   label?: string;
-  /** Helper text, to the right of the label */
   helper?: string;
-  /** Hint text, below the select */
   hint?: string;
-  /** Display hint icon to the left of the hint
-   * @default false
-   */
   showHintIcon?: boolean;
-  /** Display the select with an error state */
   error?: boolean | string;
-  /** Dispaly required mark to the right of the label */
   required?: boolean;
-  /** Classname for the select container (use this to position the select) */
   className?: string;
-  /** Classname for the select trigger (use this to restyle the select) */
   triggerClassName?: string;
 }
 
-/* ---------------------------------- Component --------------------------------- */
 const Select = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Root> & SelectProps
@@ -227,7 +202,12 @@ const Select = React.forwardRef<
     >(undefined);
 
     return (
-      <div className={twMerge(clsx("w-full", className))}>
+      <motion.div
+        className={twMerge(clsx("w-full", className))}
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+      >
         <SelectBase
           {...props}
           onValueChange={(value) => {
@@ -285,7 +265,7 @@ const Select = React.forwardRef<
             ))}
           </SelectContent>
         </SelectBase>
-      </div>
+      </motion.div>
     );
   }
 );

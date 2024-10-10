@@ -6,6 +6,7 @@ When the user subscribes, the card should show a checkmark icon and a thank you 
 
 import React, { useState } from 'react';
 import { LockSimple, Check } from '@phosphor-icons/react/dist/ssr';
+import { motion, AnimatePresence } from 'framer-motion';
 import Button from '@/components/ion/Button';
 import Input from '@/components/ion/Input';
 
@@ -18,11 +19,17 @@ const SubscribeToContinueCard = () => {
   };
 
   return (
-    <div
+    <motion.div
       className="bg-background w-full max-w-md mx-auto p-6 rounded-radius-md shadow-medium"
     >
+      <AnimatePresence exitBeforeEnter>
         {!isSubscribed ? (
-          <div
+          <motion.div
+            key="form"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
           >
             <div className="flex items-center justify-center mb-4">
               <LockSimple size={48} className="text-primary" weight="fill" />
@@ -52,10 +59,14 @@ const SubscribeToContinueCard = () => {
             <p className="text-subtle text-sm text-center mt-4">
               Limited time offer: Get 30% off your first month!
             </p>
-          </div>
+          </motion.div>
         ) : (
-          <div
+          <motion.div
             key="success"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.3 }}
             className="text-center"
           >
             <div className="flex items-center justify-center mb-4">
@@ -75,9 +86,10 @@ const SubscribeToContinueCard = () => {
             >
               Close
             </Button>
-          </div>
+          </motion.div>
         )}
-    </div>
+      </AnimatePresence>
+    </motion.div>
   );
 };
 

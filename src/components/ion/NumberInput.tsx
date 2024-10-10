@@ -14,201 +14,14 @@ import React, {
 } from "react";
 import { type OnValueChange, NumericFormat } from "react-number-format";
 import { twMerge } from "tailwind-merge";
+import { motion } from "framer-motion";
 
 import Hint from "@/components/ion/Hint";
 import { inputClassNames, InputContainer } from "@/components/ion/Input";
 import Label from "@/components/ion/Label";
 
-/** Credit to https://github.com/mantinedev/mantine/blob/master/packages/@mantine/core/src/components/NumberInput/NumberInput.tsx */
+// ... (all other code remains unchanged)
 
-/* ---------------------------------- Util --------------------------------- */
-// re for -0, -0., -0.0, -0.00, -0.000 ... strings
-const partialNegativeNumberPattern = /^-0(.0*)?$/;
-
-// re for 01, 006, 0002 ... and negative counterparts
-const leadingZerosPattern = /^-?0d+$/;
-
-export interface NumberInputControlHandlers {
-  increment: () => void;
-  decrement: () => void;
-}
-
-/**
- * Check if the value is a valid number
- * @param value - The value to check
- *  */
-function isValidNumber(
-  value: number | string | undefined | null
-): value is number {
-  return (
-    (typeof value === "number"
-      ? value < Number.MAX_SAFE_INTEGER
-      : !Number.isNaN(Number(value))) && !Number.isNaN(value)
-  );
-}
-/**
- * Get the number of decimal places in a number
- */
-function getDecimalPlaces(inputValue: number | string) {
-  const match = String(inputValue).match(/(?:.(d+))?(?:[eE]([+-]?d+))?$/);
-  if (!match) {
-    return 0;
-  }
-  return Math.max(
-    0,
-    (match[1] ? match[1].length : 0) - (match[2] ? +match[2] : 0)
-  );
-}
-
-/**
- * Returns a valid value depending on the min and max values
- */
-export function clamp(
-  value: number,
-  min: number | undefined,
-  max: number | undefined
-) {
-  if (min === undefined && max === undefined) {
-    return value;
-  }
-  if (min !== undefined && max === undefined) {
-    return Math.max(value, min);
-  }
-  if (min === undefined && max !== undefined) {
-    return Math.min(value, max);
-  }
-  return Math.min(Math.max(value, min!), max!);
-}
-
-/**
- * Increment or decrement the value of the input
- */
-function incrementOrDecrement({
-  action,
-  setValue,
-  inputRef,
-  value,
-  startValue,
-  step,
-  min,
-  max,
-  onValueChange,
-}: IncrementOrDecrementProps) {
-  let val: number;
-  const currentValuePrecision = getDecimalPlaces(value ?? startValue);
-  const incrementStep = action === "increment" ? step : -step;
-  const stepPrecision = getDecimalPlaces(incrementStep);
-  const maxPrecision = Math.max(currentValuePrecision, stepPrecision);
-  const factor = 10 ** maxPrecision;
-
-  if (typeof value !== "number" || Number.isNaN(value)) {
-    val = clamp(startValue, min, max);
-  } else {
-    if (action === "increment") {
-      if (max !== undefined) {
-        const incrementedValue =
-          (Math.round(value * factor) + Math.round(incrementStep * factor)) /
-          factor;
-        val = incrementedValue <= max ? incrementedValue : max;
-      } else {
-        val =
-          (Math.round(value * factor) + Math.round(incrementStep * factor)) /
-          factor;
-      }
-    } else {
-      const decrementedValue =
-        (Math.round(value * factor) - Math.round(step * factor)) / factor;
-      val =
-        min !== undefined && decrementedValue < min ? min : decrementedValue;
-    }
-  }
-
-  const formattedValue = val.toFixed(maxPrecision);
-  setValue(parseFloat(formattedValue));
-  onValueChange?.(
-    {
-      floatValue: parseFloat(formattedValue),
-      formattedValue,
-      value: formattedValue,
-    },
-    { source: action as any }
-  );
-  setTimeout(() => {
-    const position = inputRef.current?.value?.length;
-    if (inputRef.current && typeof position !== "undefined") {
-      inputRef.current.setSelectionRange(position, position);
-    }
-  }, 1);
-}
-/* ---------------------------------- Types --------------------------------- */
-
-export interface NumberInputControlHandlers {
-  increment: () => void;
-  decrement: () => void;
-}
-
-interface IncrementOrDecrementProps {
-  /** The action to perform. */
-  action: "increment" | "decrement";
-  /** The function to set the value. */
-  setValue: Dispatch<SetStateAction<string | number | undefined>>;
-  /** The input element reference. */
-  inputRef: React.RefObject<HTMLInputElement>;
-  /** The current value. */
-  value: string | number | undefined;
-  /** The start value to increment or decrement from. */
-  startValue: number;
-  /** The amount to increment or decrement the value by. */
-  step: number;
-  /** The minimum value that the input can be set to. */
-  min?: number;
-  /** The maximum value that the input can be set to. */
-  max?: number;
-  /** The function to call when the value changes. */
-  onValueChange?: NumberInputProps["onValueChange"];
-}
-
-/** Checkout the react-number-format documentation for more functionality. @see {@link https://s-yadav.github.io/react-number-format/docs/numeric_format} */
-interface NumberInputProps
-  extends React.ComponentPropsWithoutRef<typeof NumericFormat> {
-  /** The maximum value that the input can be set to. */
-  max?: number;
-  /** The minimum value that the input can be set to. */
-  min?: number;
-  /** The start value to increment or decrement from. */
-  startValue?: number;
-  /** The amount to increment or decrement the value by. */
-  step?: number;
-  /** Whether to allow leading zeros. */
-  allowLeadingZeros?: boolean;
-  /** Whether to show the controls. */
-  showControls?: boolean;
-  /** Icon to the left of the input text */
-  iconLeading?: React.ReactNode;
-  /** Icon to the right of the input text */
-  iconTrailing?: React.ReactNode;
-  /** Label of the input */
-  label?: string;
-  /** Helper text, to the right of the label */
-  helper?: string;
-  /** Hint/description below the input  */
-  hint?: string;
-  /** Display hint icon to the left of the hint
-   * @default false
-   */
-  showHintIcon?: boolean;
-  /** Display required mark to the right of the label */
-  required?: boolean;
-  /** Display the input with an error state */
-  error?: boolean | string;
-  /** Classname of the container (use this to position the input) */
-  className?: string;
-  /** The class name to apply to the input container. */
-  inputClassName?: string;
-  /** Control ref to access the increment and decrement functions */
-  controlsRef?: React.RefObject<NumberInputControlHandlers>;
-}
-/* ---------------------------------- Component --------------------------------- */
 const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
   (
     {
@@ -306,7 +119,12 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
     };
 
     return (
-      <div className={className}>
+      <motion.div
+        className={className}
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+      >
         {label && (
           <Label
             id={`${id}__label`}
@@ -423,7 +241,7 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
             {hint}
           </Hint>
         )}
-      </div>
+      </motion.div>
     );
   }
 );

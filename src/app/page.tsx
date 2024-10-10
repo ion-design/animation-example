@@ -1,7 +1,9 @@
+// src/app/page.tsx
 // Generated with Ion on 10/10/2024, 7:45:40 AM
 // Figma Link: https://www.figma.com/design/GzGS1XBtO8fnXGsjKDPiIf?node-id=8:1966
 "use client";
 
+import { motion } from "framer-motion";
 import ProfileCard from "@/components/ion/ProfileCard";
 import ProjectCard from "@/components/ion/ProjectCard";
 import RevenueCard from "@/components/ion/RevenueCard";
@@ -14,14 +16,24 @@ function ExamplePage() {
     <div className="w-screen h-screen flex">
       <SideNavigation />
       <div className="bg-container flex-1 h-full w-full flex justify-center items-center gap-5 p-10">
-        <div className="w-fit flex flex-col gap-5">
+        <motion.div
+          className="w-fit flex flex-col gap-5"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+        >
           <RevenueCard />
             <TokenMetric badge={<Badge color="green">+5.2%</Badge>} title="Total Revenue" metric="$1,200" />
-        </div>
-        <div className="w-fit flex flex-col gap-5">
+        </motion.div>
+        <motion.div
+          className="w-fit flex flex-col gap-5"
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+        >
           <ProfileCard handle="@SkyHighSam" name="Samuel Barnholdt" />
           <ProjectCard projectName="Project Details" />
-        </div>
+        </motion.div>
       </div>
     </div>
   );

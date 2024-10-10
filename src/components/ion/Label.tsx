@@ -1,30 +1,19 @@
-// ion/Label: Generated with Ion on 8/13/2024, 1:29:37 PM
 import * as LabelPrimitive from "@radix-ui/react-label";
 import { cva } from "class-variance-authority";
 import clsx from "clsx";
 import * as React from "react";
-
-/* ---------------------------------- Type --------------------------------- */
+import { motion } from "framer-motion";
 
 export interface LabelProps
   extends React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root> {
-  /** Display required mark to the right of the label */
   required?: boolean;
-  /** Display the label with a disabled state */
   disabled?: boolean;
-  /** Helper text, to the right of the label */
   helper?: string;
-  /** Description below the label */
   description?: string;
-  /** HTML ID of the description element */
   descriptionId?: string;
-  /** Classname of the label container (use this to position the label) */
   className?: string;
-  /** Classname of the label (use this to restyle the label) */
   labelClassName?: string;
 }
-
-/* ---------------------------------- Component --------------------------------- */
 
 const labelVariants = cva(
   "text-sm gap-1 font-medium text-secondary whitespace-nowrap peer-disabled:cursor-not-allowed peer-disabled:text-on-disabled"
@@ -49,7 +38,7 @@ const Label = React.forwardRef<
     ref
   ) => {
     return (
-      <div
+      <motion.div
         className={clsx(
           labelVariants(),
           {
@@ -57,6 +46,9 @@ const Label = React.forwardRef<
           },
           className
         )}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
       >
         <LabelPrimitive.Root
           ref={ref}
@@ -85,16 +77,19 @@ const Label = React.forwardRef<
             </span>
           )}
         </LabelPrimitive.Root>
-        <p
+        <motion.p
           id={descriptionId}
           className={clsx(
             "text-sm font-normal",
             disabled ? "text-on-disabled" : "text-secondary"
           )}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
         >
           {description}
-        </p>
-      </div>
+        </motion.p>
+      </motion.div>
     );
   }
 );
