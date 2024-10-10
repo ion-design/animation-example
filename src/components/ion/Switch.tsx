@@ -4,6 +4,7 @@
 import * as SwitchPrimitives from "@radix-ui/react-switch";
 import clsx from "clsx";
 import * as React from "react";
+import { motion } from "framer-motion";
 
 import Label from "@/components/ion/Label";
 
@@ -40,6 +41,7 @@ const Switch = React.forwardRef<
     return (
       <span className="flex items-center gap-2 text-sm">
         <SwitchPrimitives.Root
+          asChild
           id={id}
           ref={ref}
           aria-required={required}
@@ -61,16 +63,22 @@ const Switch = React.forwardRef<
           )}
           {...props}
         >
-          <SwitchPrimitives.Thumb
-            className={clsx(
-              "pointer-events-none block rounded-full bg-white shadow-lg ring-0 transition-transform group-disabled:bg-on-disabled group-disabled:shadow-none data-[state=unchecked]:translate-x-0",
-              {
-                "h-3 w-3 data-[state=checked]:translate-x-4": size === "sm",
-                "h-5 w-5 data-[state=checked]:translate-x-6": size === "md",
-                "h-6 w-6 data-[state=checked]:translate-x-5": size === "lg",
-              }
-            )}
-          />
+          <motion.div
+            initial={{ scale: 0.9 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 0.2 }}
+          >
+            <SwitchPrimitives.Thumb
+              className={clsx(
+                "pointer-events-none block rounded-full bg-white shadow-lg ring-0 transition-transform group-disabled:bg-on-disabled group-disabled:shadow-none data-[state=unchecked]:translate-x-0",
+                {
+                  "h-3 w-3 data-[state=checked]:translate-x-4": size === "sm",
+                  "h-5 w-5 data-[state=checked]:translate-x-6": size === "md",
+                  "h-6 w-6 data-[state=checked]:translate-x-5": size === "lg",
+                }
+              )}
+            />
+          </motion.div>
         </SwitchPrimitives.Root>
         {label && (
           <Label
