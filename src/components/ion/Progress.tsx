@@ -4,8 +4,11 @@
 import * as ProgressPrimitive from "@radix-ui/react-progress";
 import clsx from "clsx";
 import * as React from "react";
+import { motion } from "framer-motion";
 
 /* ---------------------------------- Component --------------------------------- */
+
+const MotionIndicator = motion(ProgressPrimitive.Indicator);
 
 const Progress = React.forwardRef<
   React.ElementRef<typeof ProgressPrimitive.Root>,
@@ -19,9 +22,11 @@ const Progress = React.forwardRef<
     )}
     {...props}
   >
-    <ProgressPrimitive.Indicator
-      className="h-full w-full flex-1 bg-primary transition-all rounded-full focus:primary-focus"
-      style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
+    <MotionIndicator
+      className="h-full w-full flex-1 bg-primary rounded-full focus:primary-focus origin-left"
+      initial={false}
+      animate={{ scaleX: (value || 0) / 100 }}
+      transition={{ type: "tween", duration: 0.4, ease: "easeInOut" }}
     />
   </ProgressPrimitive.Root>
 ));
