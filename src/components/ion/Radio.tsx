@@ -5,6 +5,7 @@ import { Circle } from "@phosphor-icons/react/dist/ssr";
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 import clsx from "clsx";
 import * as React from "react";
+import { motion } from "framer-motion";
 
 import Label from "@/components/ion/Label";
 
@@ -71,15 +72,22 @@ const RadioGroupItem = React.forwardRef<
           {...props}
         >
           <RadioGroupPrimitive.Indicator className="relative flex items-center justify-center">
-            <Circle
-              weight="fill"
-              className={clsx(
-                "parent h-2.5 w-2.5 rounded-full border-none fill-white text-current disabled:fill-blue-500",
-                {
-                  "fill-soft": props.disabled,
-                }
-              )}
-            />
+            <motion.span
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              className="flex items-center justify-center"
+            >
+              <Circle
+                weight="fill"
+                className={clsx(
+                  "parent h-2.5 w-2.5 rounded-full border-none fill-white text-current disabled:fill-blue-500",
+                  {
+                    "fill-soft": props.disabled,
+                  }
+                )}
+              />
+            </motion.span>
           </RadioGroupPrimitive.Indicator>
         </RadioGroupPrimitive.Item>
         {label && (
