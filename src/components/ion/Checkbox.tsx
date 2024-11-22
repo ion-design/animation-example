@@ -6,6 +6,7 @@ import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import clsx from "clsx";
 import * as React from "react";
 import { twMerge } from "tailwind-merge";
+import { motion } from "framer-motion";
 
 import Label from "@/components/ion/Label";
 
@@ -64,21 +65,26 @@ const Checkbox = React.forwardRef<
           )}
           {...props}
         >
-          <CheckboxPrimitive.Indicator
-            className={clsx("flex items-center justify-center")}
-          >
-            <Check
-              size={12}
-              weight="bold"
-              className={
-                "z-10 hidden transition-none group-data-[state=checked]:block"
-              }
-            />
-            <Minus
-              size={12}
-              weight="bold"
-              className={"hidden group-data-[state=indeterminate]:block"}
-            />
+          <CheckboxPrimitive.Indicator forceMount asChild>
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 0.2 }}
+              className="flex items-center justify-center"
+            >
+              <Check
+                size={12}
+                weight="bold"
+                className={
+                  "z-10 hidden transition-none group-data-[state=checked]:block"
+                }
+              />
+              <Minus
+                size={12}
+                weight="bold"
+                className={"hidden group-data-[state=indeterminate]:block"}
+              />
+            </motion.div>
           </CheckboxPrimitive.Indicator>
         </CheckboxPrimitive.Root>
         {label && (

@@ -1,16 +1,39 @@
 // ion/DatePicker/Calendar: Generated with Ion on 8/5/2024, 8:46:42 PM
 import { CaretLeft, CaretRight } from "@phosphor-icons/react";
 import * as React from "react";
-import { DayPicker } from "react-day-picker";
+import { DayPicker, NavButtonProps } from "react-day-picker";
 import { twMerge } from "tailwind-merge";
 
-import { buttonVariants } from "@/components/ion/Button";
+import Button from "@/components/ion/Button";
 
 /* ---------------------------------- Type --------------------------------- */
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
 /* ---------------------------------- Component --------------------------------- */
+
+function CustomNavButton(props: NavButtonProps) {
+  const { dir, ...buttonProps } = props;
+  const isPrev = dir === "prev";
+  return (
+    <Button
+      variant="ghost"
+      color="neutral"
+      size="sm"
+      className={twMerge(
+        "h-8 w-8",
+        isPrev ? "absolute left-1 rounded-radius" : "absolute right-1"
+      )}
+      {...buttonProps}
+    >
+      {isPrev ? (
+        <CaretLeft className="h-4 w-4" />
+      ) : (
+        <CaretRight className="h-4 w-4" />
+      )}
+    </Button>
+  );
+}
 
 function Calendar({
   className,
@@ -23,14 +46,15 @@ function Calendar({
       showOutsideDays={showOutsideDays}
       className={className}
       classNames={{
-        months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
+        months:
+          "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
         month: "space-y-8",
         caption: "flex justify-center pt-1 relative items-center",
         caption_label: "text-sm font-medium",
         nav: "space-x-1 flex items-center",
         nav_button: twMerge(
-          buttonVariants({ color: "neutral", variant: "ghost", size: "sm" }),
-          "h-8 w-8"
+          "h-8 w-8",
+          "focus-visible:primary-focus"
         ),
         nav_button_previous: "absolute left-1 rounded-radius",
         nav_button_next: "absolute right-1",
@@ -52,8 +76,7 @@ function Calendar({
         ...classNames,
       }}
       components={{
-        IconLeft: () => <CaretLeft className="h-4 w-4" />,
-        IconRight: () => <CaretRight className="h-4 w-4" />,
+        NavButton: CustomNavButton,
       }}
       {...props}
     />

@@ -4,6 +4,7 @@ import * as AvatarPrimitive from "@radix-ui/react-avatar";
 import { cva } from "class-variance-authority";
 import clsx from "clsx";
 import * as React from "react";
+import { motion } from "framer-motion";
 
 /* ---------------------------------- Component --------------------------------- */
 
@@ -117,13 +118,15 @@ const avatarStatusClassNames = cva(
   }
 );
 
+const MotionDiv = motion.div;
+
 const AvatarStatus = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement> & AvatarStatusProps
 >(({ className, type, location, size, variant, ...props }, ref) => {
   const iconSize = size === "sm" ? 6 : 8;
   return (
-    <div
+    <MotionDiv
       ref={ref}
       className={clsx(
         avatarStatusClassNames({
@@ -134,12 +137,15 @@ const AvatarStatus = React.forwardRef<
         }),
         className
       )}
+      initial={{ scale: 0.8, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      transition={{ duration: 0.15, ease: "easeOut" }}
       {...props}
     >
       {type === "check" && <Check weight="bold" size={iconSize} />}
       {type === "plus" && <Plus weight="bold" size={iconSize} />}
       {type === "delete" && <X weight="bold" size={iconSize} />}
-    </div>
+    </MotionDiv>
   );
 });
 AvatarStatus.displayName = "AvatarStatus";
@@ -239,6 +245,8 @@ interface AvatarProps {
 
 /* ---------------------------------- Component --------------------------------- */
 
+const MotionAvatarPrimitiveRoot = motion(AvatarPrimitive.Root);
+
 const Avatar = React.forwardRef<
   React.ElementRef<typeof AvatarPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root> & AvatarProps
@@ -269,7 +277,7 @@ const Avatar = React.forwardRef<
           "gap-x-2": size === "sm",
         })}
       >
-        <AvatarPrimitive.Root
+        <MotionAvatarPrimitiveRoot
           ref={ref}
           className={clsx(
             {
@@ -282,6 +290,9 @@ const Avatar = React.forwardRef<
             },
             className
           )}
+          initial={{ scale: 0.95, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
           {...props}
         >
           {topStatus && (
@@ -322,7 +333,7 @@ const Avatar = React.forwardRef<
           >
             {initials ? initials : fallback}
           </AvatarFallback>
-        </AvatarPrimitive.Root>
+        </MotionAvatarPrimitiveRoot>
         {title && (
           <div className="flex flex-col">
             <AvatarTitle size={size}>{title}</AvatarTitle>
