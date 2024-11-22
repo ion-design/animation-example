@@ -119,7 +119,7 @@ const SelectItem = React.forwardRef<
     <SelectPrimitive.Item
       ref={ref}
       className={clsx(
-        "group relative flex w-full cursor-default select-none items-center gap-1 rounded-radius-xs p-2 text-sm font-semibold text-on-background outline-none focus:bg-container hover:bg-container data-[disabled]:pointer-events-none data-[state=checked]:pr-8 data-[state=open]:pr-8 data-[disabled]:text-on-disabled",
+        "group relative flex w-full cursor-default select-none items-center gap-1 rounded-radius-xs p-2 text-sm font-semibold text-on-background outline-none focus:bg-container hover:bg-container data-[disabled]:pointer-events-none data-[state=checked]:pr-8 data-[state=open]:pr-8 data-[disabled]:text-on-disabled transition-colors duration-200",
         className
       )}
       {...props}

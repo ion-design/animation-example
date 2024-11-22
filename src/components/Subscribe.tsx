@@ -1,13 +1,8 @@
-/* 
-A card for a user to input their email and subscribe to a newsletter. There should be messaging on the card to encourage the user to subscribe and generate FOMO.
-
-When the user subscribes, the card should show a checkmark icon and a thank you message.
-*/
-
 import React, { useState } from 'react';
 import { LockSimple, Check } from '@phosphor-icons/react/dist/ssr';
 import Button from '@/components/ion/Button';
 import Input from '@/components/ion/Input';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const SubscribeToContinueCard = () => {
   const [email, setEmail] = useState('');
@@ -18,11 +13,15 @@ const SubscribeToContinueCard = () => {
   };
 
   return (
-    <div
-      className="bg-background w-full max-w-md mx-auto p-6 rounded-radius-md shadow-medium"
-    >
+    <div className="bg-background w-full max-w-md mx-auto p-6 rounded-radius-md shadow-medium">
+      <AnimatePresence mode="wait">
         {!isSubscribed ? (
-          <div
+          <motion.div
+            key="subscribe"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3 }}
           >
             <div className="flex items-center justify-center mb-4">
               <LockSimple size={48} className="text-primary" weight="fill" />
@@ -31,7 +30,8 @@ const SubscribeToContinueCard = () => {
               Unlock Exclusive Content!
             </h2>
             <p className="text-secondary text-center mb-6">
-              Don&apos;t miss out on premium insights, expert analysis, and exclusive offers. Subscribe now and stay ahead of the curve!
+              Don&apos;t miss out on premium insights, expert analysis, and exclusive offers.
+              Subscribe now and stay ahead of the curve!
             </p>
             <div className="space-y-4">
               <Input
@@ -52,10 +52,14 @@ const SubscribeToContinueCard = () => {
             <p className="text-subtle text-sm text-center mt-4">
               Limited time offer: Get 30% off your first month!
             </p>
-          </div>
+          </motion.div>
         ) : (
-          <div
+          <motion.div
             key="success"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3 }}
             className="text-center"
           >
             <div className="flex items-center justify-center mb-4">
@@ -75,8 +79,9 @@ const SubscribeToContinueCard = () => {
             >
               Close
             </Button>
-          </div>
+          </motion.div>
         )}
+      </AnimatePresence>
     </div>
   );
 };

@@ -1,14 +1,15 @@
 // ion/DatePicker/Calendar: Generated with Ion on 8/5/2024, 8:46:42 PM
 import { CaretLeft, CaretRight } from "@phosphor-icons/react";
 import * as React from "react";
-import { DayPicker } from "react-day-picker";
+import { DayPicker, DayPickerProps, Month } from "react-day-picker";
 import { twMerge } from "tailwind-merge";
+import { motion, AnimatePresence } from "framer-motion";
 
 import { buttonVariants } from "@/components/ion/Button";
 
 /* ---------------------------------- Type --------------------------------- */
 
-export type CalendarProps = React.ComponentProps<typeof DayPicker>;
+export type CalendarProps = DayPickerProps;
 
 /* ---------------------------------- Component --------------------------------- */
 
@@ -18,12 +19,21 @@ function Calendar({
   showOutsideDays = true,
   ...props
 }: CalendarProps) {
+  const [month, setMonth] = React.useState(props.month || new Date());
+
+  const handleMonthChange = React.useCallback((newMonth: Date) => {
+    setMonth(newMonth);
+  }, []);
+
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
+      month={month}
+      onMonthChange={handleMonthChange}
       className={className}
       classNames={{
-        months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
+        months:
+          "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0 overflow-hidden",
         month: "space-y-8",
         caption: "flex justify-center pt-1 relative items-center",
         caption_label: "text-sm font-medium",
@@ -54,11 +64,29 @@ function Calendar({
       components={{
         IconLeft: () => <CaretLeft className="h-4 w-4" />,
         IconRight: () => <CaretRight className="h-4 w-4" />,
+        Month: AnimatedMonth,
       }}
       {...props}
     />
   );
 }
+
+const AnimatedMonth = (props: any) => {
+  return (
+    <AnimatePresence initial={false}>
+      <motion.div
+        key={props.month.getTime()}
+        initial={{ opacity: 0, x: 50 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -50 }}
+        transition={{ duration: 0.2, ease: "easeInOut" }}
+      >
+        <Month {...props} />
+      </motion.div>
+    </AnimatePresence>
+  );
+};
+
 Calendar.displayName = "Calendar";
 
 export { Calendar };

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { CloudSun, CloudRain, CloudSnow, Wind, Drop, MapPin } from '@phosphor-icons/react';
 import Input from '@/components/ion/Input';
 import Divider from '@/components/ion/Divider';
+import { motion } from 'framer-motion';
 
 const WeatherCard = () => {
   const [zipCode, setZipCode] = useState('');
@@ -69,7 +70,11 @@ const WeatherCard = () => {
       {loading ? (
         <div className="text-center text-secondary">Loading weather data...</div>
       ) : weather.condition ? (
-        <div>
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+        >
           <div className="flex justify-between items-center mb-4">
             <div className="text-4xl font-bold text-primary">{weather.temperature}°C</div>
             {getWeatherIcon()}
@@ -91,7 +96,7 @@ const WeatherCard = () => {
           <div className="bg-neutral-container p-4 rounded-radius-sm mt-2">
             <p className="text-on-primary-container">{getClothingSuggestion()}</p>
           </div>
-        </div>
+        </motion.div>
       ) : (
         <div className="text-center text-secondary">Enter a ZIP code to check the weather</div>
       )}
