@@ -4,11 +4,13 @@
 import { Code, User } from "@phosphor-icons/react/dist/ssr";
 import clsx from "clsx";
 import { type MouseEvent, useState } from "react";
+import { motion } from "framer-motion";
 
 import Button from "@/components/ion/Button";
 import Input from "@/components/ion/Input";
 import NumberInput from "@/components/ion/NumberInput";
 import { RadioGroup, RadioGroupItem as Radio } from "@/components/ion/Radio";
+
 type ProjectCardProps = {
   projectName?: string;
   className?: string;
@@ -31,11 +33,14 @@ function ProjectCard({
   }
 
   return (
-    <div
+    <motion.div
       className={clsx(
         "bg-background w-[400px] flex flex-col justify-center items-center rounded-radius-sm shadow-[0_4px_20px_0_rgba(0,0,0,0.1)]",
         className
       )}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
     >
       <div className="w-full flex flex-col gap-5 px-10 py-5">
         <div className="text-lg font-semibold text-foreground">
@@ -89,7 +94,7 @@ function ProjectCard({
           Confirm
         </Button>
       </div>
-    </div>
+    </motion.div>
   );
 }
 export default ProjectCard;

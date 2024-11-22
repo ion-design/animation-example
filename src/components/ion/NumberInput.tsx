@@ -1,3 +1,4 @@
+// src/components/ion/NumberInput.tsx
 // Generated with Ion on 10/10/2024, 7:45:40 AM
 // Figma Link: https://www.figma.com/design/GzGS1XBtO8fnXGsjKDPiIf?node-id=430:1834
 // ion/NumberInput: Generated with Ion on 10/10/2024, 7:45:39 AM
@@ -14,6 +15,7 @@ import React, {
 } from "react";
 import { type OnValueChange, NumericFormat } from "react-number-format";
 import { twMerge } from "tailwind-merge";
+import { motion, useAnimation } from "framer-motion";
 
 import Hint from "@/components/ion/Hint";
 import { inputClassNames, InputContainer } from "@/components/ion/Input";
@@ -36,7 +38,7 @@ export interface NumberInputControlHandlers {
 /**
  * Check if the value is a valid number
  * @param value - The value to check
- *  */
+  */
 function isValidNumber(
   value: number | string | undefined | null
 ): value is number {
@@ -50,7 +52,7 @@ function isValidNumber(
  * Get the number of decimal places in a number
  */
 function getDecimalPlaces(inputValue: number | string) {
-  const match = String(inputValue).match(/(?:.(d+))?(?:[eE]([+-]?d+))?$/);
+  const match = String(inputValue).match(/(?:.(\d+))?(?:[eE]([+-]?\d+))?$/);
   if (!match) {
     return 0;
   }
@@ -270,11 +272,11 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
         value: _value,
         setValue: _setValue,
         startValue,
-        step,
-        min,
-        max,
-        onValueChange: onValueChange,
-      });
+                step,
+                min,
+                max,
+                onValueChange: onValueChange,
+              });
 
     useImperativeHandle(controlsRef, () => ({
       increment: increment.current!,
@@ -305,6 +307,16 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
       onValueChange?.(payload, event);
     };
 
+    // Animation controls for value change
+    const controls = useAnimation();
+
+    React.useEffect(() => {
+      controls.start({
+        scale: [1, 1.05, 1],
+        transition: { duration: 0.3, ease: "easeOut" },
+      });
+    }, [_value, controls]);
+
     return (
       <div className={className}>
         {label && (
@@ -333,38 +345,40 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
               {iconLeading}
             </span>
           )}
-          <NumericFormat
-            id={id}
-            aria-required={required}
-            aria-invalid={ariaInvalid}
-            aria-describedby={hint ? `${id}__hint` : undefined}
-            value={_value}
-            onValueChange={handleValueChange}
-            getInputRef={inputRef}
-            className={twMerge(clsx(inputClassNames, inputClassName))}
-            min={min}
-            max={max}
-            allowLeadingZeros={allowLeadingZeros}
-            onKeyDown={(e) => {
-              onKeyDown?.(e);
-              if (e.key === "ArrowDown") {
-                onDecrement();
-              }
-              if (e.key === "ArrowUp") {
-                onIncrement();
-              }
-            }}
-            onBlur={(e) => {
-              onBlur?.(e);
-              if (typeof _value === "number") {
-                const clampedValue = clamp(_value, min, max);
-                if (clampedValue !== _value) {
-                  _setValue(clampedValue);
+          <motion.div animate={controls}>
+            <NumericFormat
+              id={id}
+              aria-required={required}
+              aria-invalid={ariaInvalid}
+              aria-describedby={hint ? `${id}__hint` : undefined}
+              value={_value}
+              onValueChange={handleValueChange}
+              getInputRef={inputRef}
+              className={twMerge(clsx(inputClassNames, inputClassName))}
+              min={min}
+              max={max}
+              allowLeadingZeros={allowLeadingZeros}
+              onKeyDown={(e) => {
+                onKeyDown?.(e);
+                if (e.key === "ArrowDown") {
+                  onDecrement();
                 }
-              }
-            }}
-            {...props}
-          />
+                if (e.key === "ArrowUp") {
+                  onIncrement();
+                }
+              }}
+              onBlur={(e) => {
+                onBlur?.(e);
+                if (typeof _value === "number") {
+                  const clampedValue = clamp(_value, min, max);
+                  if (clampedValue !== _value) {
+                    _setValue(clampedValue);
+                  }
+                }
+              }}
+              {...props}
+            />
+          </motion.div>
           {iconTrailing && (
             <span
               className={clsx("text-subtle", {

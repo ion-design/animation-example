@@ -2,6 +2,7 @@
 import { cva } from "class-variance-authority";
 import clsx from "clsx";
 import React from "react";
+import { motion } from "framer-motion";
 
 const badgeClassNames = cva(
   ["font-semibold", "rounded-full", "shrink-0", "whitespace-nowrap", "border"],

@@ -3,6 +3,7 @@ import * as LabelPrimitive from "@radix-ui/react-label";
 import { cva } from "class-variance-authority";
 import clsx from "clsx";
 import * as React from "react";
+import { motion } from "framer-motion";
 
 /* ---------------------------------- Type --------------------------------- */
 
@@ -30,6 +31,11 @@ const labelVariants = cva(
   "text-sm gap-1 font-medium text-secondary whitespace-nowrap peer-disabled:cursor-not-allowed peer-disabled:text-on-disabled"
 );
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1 },
+};
+
 const Label = React.forwardRef<
   React.ElementRef<typeof LabelPrimitive.Root>,
   LabelProps
@@ -49,7 +55,7 @@ const Label = React.forwardRef<
     ref
   ) => {
     return (
-      <div
+      <motion.div
         className={clsx(
           labelVariants(),
           {
@@ -57,6 +63,10 @@ const Label = React.forwardRef<
           },
           className
         )}
+        initial="hidden"
+        animate="visible"
+        variants={containerVariants}
+        transition={{ duration: 0.3, ease: "easeOut" }}
       >
         <LabelPrimitive.Root
           ref={ref}
@@ -85,16 +95,18 @@ const Label = React.forwardRef<
             </span>
           )}
         </LabelPrimitive.Root>
-        <p
-          id={descriptionId}
-          className={clsx(
-            "text-sm font-normal",
-            disabled ? "text-on-disabled" : "text-secondary"
-          )}
-        >
-          {description}
-        </p>
-      </div>
+        {description && (
+          <p
+            id={descriptionId}
+            className={clsx(
+              "text-sm font-normal",
+              disabled ? "text-on-disabled" : "text-secondary"
+            )}
+          >
+            {description}
+          </p>
+        )}
+      </motion.div>
     );
   }
 );
