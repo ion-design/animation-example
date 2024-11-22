@@ -5,6 +5,7 @@ import { Circle } from "@phosphor-icons/react/dist/ssr";
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 import clsx from "clsx";
 import * as React from "react";
+import { motion } from "framer-motion";
 
 import Label from "@/components/ion/Label";
 
@@ -53,35 +54,41 @@ const RadioGroupItem = React.forwardRef<
     const ariaInvalid = props["aria-invalid"] || !!error;
     return (
       <span className="flex items-center space-x-2">
-        <RadioGroupPrimitive.Item
-          id={id}
-          ref={ref}
-          aria-required={required}
-          aria-invalid={ariaInvalid}
-          aria-describedby={description ? `${id}__description` : undefined}
-          className={clsx(
-            "bg-background focus-visible:primary-focus focus-visible:border-stroke-primary aspect-square h-4 w-4 rounded-full border border-outline text-subtle hover:border-stroke-strong aria-checked:border-primary aria-checked:bg-primary aria-checked:text-primary",
-            "disabled:cursor-not-allowed disabled:border-none disabled:bg-disabled disabled:aria-checked:bg-disabled disabled:aria-checked:text-subtle",
-            "transition-shadows transition-colors",
-            error
-              ? "border-danger aria-checked:border-danger aria-checked:bg-danger"
-              : "border-stroke",
-            className
-          )}
-          {...props}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3 }}
         >
-          <RadioGroupPrimitive.Indicator className="relative flex items-center justify-center">
-            <Circle
-              weight="fill"
-              className={clsx(
-                "parent h-2.5 w-2.5 rounded-full border-none fill-white text-current disabled:fill-blue-500",
-                {
-                  "fill-soft": props.disabled,
-                }
-              )}
-            />
-          </RadioGroupPrimitive.Indicator>
-        </RadioGroupPrimitive.Item>
+          <RadioGroupPrimitive.Item
+            id={id}
+            ref={ref}
+            aria-required={required}
+            aria-invalid={ariaInvalid}
+            aria-describedby={description ? `${id}__description` : undefined}
+            className={clsx(
+              "bg-background focus-visible:primary-focus focus-visible:border-stroke-primary aspect-square h-4 w-4 rounded-full border border-outline text-subtle hover:border-stroke-strong aria-checked:border-primary aria-checked:bg-primary aria-checked:text-primary",
+              "disabled:cursor-not-allowed disabled:border-none disabled:bg-disabled disabled:aria-checked:bg-disabled disabled:aria-checked:text-subtle",
+              "transition-shadows transition-colors",
+              error
+                ? "border-danger aria-checked:border-danger aria-checked:bg-danger"
+                : "border-stroke",
+              className
+            )}
+            {...props}
+          >
+            <RadioGroupPrimitive.Indicator className="relative flex items-center justify-center">
+              <Circle
+                weight="fill"
+                className={clsx(
+                  "parent h-2.5 w-2.5 rounded-full border-none fill-white text-current disabled:fill-blue-500",
+                  {
+                    "fill-soft": props.disabled,
+                  }
+                )}
+              />
+            </RadioGroupPrimitive.Indicator>
+          </RadioGroupPrimitive.Item>
+        </motion.div>
         {label && (
           <Label
             id={`${id}__label`}

@@ -1,6 +1,7 @@
 /* Design a responsive image gallery with a masonry layout. Include hover effects that show image details and a lightbox feature for full-screen viewing. */
 import React, { useState } from 'react';
 import { X, MagnifyingGlass } from '@phosphor-icons/react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface Image {
   id: string;
@@ -25,9 +26,10 @@ const ImageGallery: React.FC = () => {
     <div className="container mx-auto px-4 py-8">
       <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4">
         {images.map((image) => (
-          <div
+          <motion.div
             key={image.id}
             className="relative mb-4 break-inside-avoid"
+            whileHover={{ scale: 1.05 }}
           >
             <img
               src={image.src}
@@ -46,17 +48,24 @@ const ImageGallery: React.FC = () => {
                 <MagnifyingGlass size={24} />
               </button>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
+      <AnimatePresence>
         {selectedImage && (
-          <div
+          <motion.div
             className="fixed inset-0 bg-black/80 flex items-center justify-center z-50"
             onClick={() => setSelectedImage(null)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
           >
-            <div
+            <motion.div
               className="relative max-w-4xl max-h-[90vh] overflow-hidden rounded-lg"
               onClick={(e) => e.stopPropagation()}
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
             >
               <img
                 src={selectedImage.src}
@@ -73,9 +82,10 @@ const ImageGallery: React.FC = () => {
               >
                 <X size={24} />
               </button>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         )}
+      </AnimatePresence>
     </div>
   );
 };

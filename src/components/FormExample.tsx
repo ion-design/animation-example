@@ -1,6 +1,4 @@
 "use client";
-// Generated with Ion on 8/6/2024, 4:58:10 PM
-// Figma Link: https://www.figma.com/design/BsgE00bYWTmwm4RY0WmYN6?node-id=2:12276
 import {
   AppleLogo,
   Envelope,
@@ -9,6 +7,7 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import { useFormik } from "formik";
 import { type MouseEvent } from "react";
+import { motion } from "framer-motion";
 
 import Button from "@/components/ion/Button";
 import Input from "@/components/ion/Input";
@@ -29,14 +28,19 @@ function FormExample() {
 
   const { values, errors, touched, handleChange, handleBlur } = useFormik({
     initialValues: {
-          email: "",
+      email: "",
     },
     onSubmit: () => {},
   });
 
   return (
     <div className="bg-container h-[800px] w-[1200px] flex justify-center items-center">
-      <div className="bg-background w-1/3 flex flex-col justify-center items-center gap-5 p-5 rounded-radius-sm shadow-[0_4px_4px_0_rgba(0,0,0,0.25)]">
+      <motion.div
+        className="bg-background w-1/3 flex flex-col justify-center items-center gap-5 p-5 rounded-radius-sm shadow-[0_4px_4px_0_rgba(0,0,0,0.25)]"
+        initial={{ opacity: 0, y: -30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
         <div className="w-full flex flex-col justify-center items-center gap-2.5 p-2.5">
           <div className="bg-on-neutral-container flex justify-center items-center p-4 rounded-full">
             <img
@@ -46,12 +50,22 @@ function FormExample() {
             />
           </div>
           <div className="flex flex-col justify-center items-center">
-            <div className="text-2xl font-semibold text-foreground">
+            <motion.div
+              className="text-2xl font-semibold text-foreground"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+            >
               Welcome back
-            </div>
-            <div className="text-base text-secondary">
+            </motion.div>
+            <motion.div
+              className="text-base text-secondary"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+            >
               Sign in to your account
-            </div>
+            </motion.div>
           </div>
         </div>
         <form className="w-full flex flex-col justify-center items-center gap-4">
@@ -83,7 +97,12 @@ function FormExample() {
             className="flex-1 w-full"
           />
         </div>
-        <div className="w-full flex flex-col justify-center items-center gap-4">
+        <motion.div
+          className="w-full flex flex-col justify-center items-center gap-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+        >
           <Button
             iconLeading={<GoogleLogo size={16} weight={"bold"} />}
             variant="outline"
@@ -114,7 +133,7 @@ function FormExample() {
           >
             Continue with SSO
           </Button>
-        </div>
+        </motion.div>
         <div className="flex justify-center items-center gap-2">
           <div className="text-sm text-secondary">Don’t have an account?</div>
           <Button
@@ -126,8 +145,9 @@ function FormExample() {
             Sign up now
           </Button>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
+
 export default FormExample;

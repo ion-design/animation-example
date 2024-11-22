@@ -1,10 +1,8 @@
-// Generated with Ion on 10/10/2024, 7:45:40 AM
-// Figma Link: https://www.figma.com/design/GzGS1XBtO8fnXGsjKDPiIf?node-id=464:5137
-// ion/Button: Generated with Ion on 10/10/2024, 7:45:39 AM
 import { cva } from "class-variance-authority";
 import clsx from "clsx";
 import * as React from "react";
 import { twMerge } from "tailwind-merge";
+import { motion } from "framer-motion";
 
 /* ---------------------------------- Type --------------------------------- */
 
@@ -168,7 +166,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     return (
-      <button
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
         className={twMerge(
           clsx(
             buttonVariants({
@@ -191,7 +191,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {iconLeading}
         {children}
         {iconTrailing}
-      </button>
+      </motion.button>
     );
   }
 );
